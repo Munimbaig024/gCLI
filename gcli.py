@@ -21,15 +21,20 @@ def cli():
 # ─────────────────────────────────────────
 @cli.command()
 @click.argument('message')
-def save(message):
+@click.option('--file', default=None, help='Stage a specific file only')
+def save(message, file):
     """Add, commit and push in one command"""
-    click.echo(click.style("📦 Staging files...", fg='cyan'))
-    run("git add .")
-    click.echo(click.style(f"💾 Committing: {message}", fg='cyan'))
+    if file:
+        click.echo(click.style(f"Staging file: {file}", fg='cyan'))
+        run(f"git add {file}")
+    else:
+        click.echo(click.style("Staging all files...", fg='cyan'))
+        run("git add .")
+    click.echo(click.style(f"Committing: {message}", fg='cyan'))
     run(f'git commit -m "{message}"')
-    click.echo(click.style("🚀 Pushing to GitHub...", fg='cyan'))
+    click.echo(click.style("Pushing to GitHub...", fg='cyan'))
     run("git push")
-    click.echo(click.style("✅ Done! Code pushed to GitHub.", fg='green'))
+    click.echo(click.style("Done! Code pushed to GitHub.", fg='green'))
 
 # ─────────────────────────────────────────
 # STATUS — pretty git status
